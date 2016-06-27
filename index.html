@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>官先生的小游戏</title>
+<link href='http://api.youziku.com/webfont/CSS/5718b756f629d80ed8fbe801' rel='stylesheet' type='text/css' />
+<link rel="stylesheet" href="css/new 2.css" />
+<meta charset="utf-8">
+<script>
+var count = 0;
+var countstart = 0;
+var	countchange;
+window.onload=function(){
+	var oUl=document.getElementById("footer");
+	var aLi=oUl.getElementsByTagName("li");
+	var oDiv=document.getElementById("content");
+	var oLi=oDiv.getElementsByTagName("li");
+	for(var i=0;i<aLi.length;i++)
+	{
+		aLi[i].index = i;
+		aLi[i].onclick=function(){
+			for(var j=0;j<aLi.length;j++)
+			{
+				aLi[j].className="";
+				oLi[j].style.display="none";
+			}
+			this.className="active";
+			oLi[this.index].style.display="block";
+		}
+		
+	}
+}
+function startchange()
+{
+	if(countstart==0)
+		countchange = setInterval("change()",500);
+}
+function change()
+{
+	var oUl=document.getElementById("footer");
+	var aLi=oUl.getElementsByTagName("li");
+	var oDiv=document.getElementById("content");
+	var oLi=oDiv.getElementsByTagName("li");
+	for(var j=0;j<aLi.length;j++)
+	{
+		aLi[j].className="";
+		oLi[j].style.display="none";
+	}
+	aLi[count].className="active";
+	oLi[count].style.display="block";
+	if (count == (aLi.length-1))
+		count = 0;
+	else
+		count++;	
+}
+function clearchange()
+{
+	if(clearInterval(countchange))
+		countstart=0;
+}
+</script>
+</head>
+<body>
+<div id="topdiv">
+<h1>官先生的小游戏</h1>
+</div>
+<div id="footer">
+<ul>
+<li  ><a href="#p1"onmouseover="clearchange()" >21点</a></li>
+<li ><a href="#p2" onmouseover="clearchange()" >拼图</a></li>
+<li class ="active"><a href="#p3" >贪吃蛇</a></li>
+<li><a href="#p4"> 飞机大战</a></li>
+</ul>
+</div>
+<div class="cc" id="ccuser">
+<ul id="content">
+<li id="p1" ><a href="tu/21.html"><img src="tu/p0.jpg" width="100%" height="100%"/></a></li>
+<li id="p2"><a href="tu/pingtu.html"><img src="tu/p1.jpg"/></a></li>
+<li id="p3" style=" display:block;"><a href="tu/she.html"><img src="tu/p2.jpg"/></a></li>
+<li id="p4"><a href="tu/tan.html"><img src="tu/feiji.jpg"/></a></li>
+</ul>
+<h4 align="center" style="color:#FF3030">点击图片进入游戏</h4>
+</div>
+</body>
+</html>

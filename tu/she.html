@@ -1,0 +1,189 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<title>贪吃蛇</title>
+<style>
+#cen{
+	margin:36px auto;
+	width:40%;
+	background:#FFFFE0;
+	max-width:400;
+	max-height:400;
+	min-height:400;
+	min-width:400;
+}
+body{
+	font-family:微软雅黑;
+	height:100%;
+	margin:0;
+	width:100%;
+	padding:0;
+}
+#intorduce{
+	margin:36px auto;	
+	width:50%;
+}
+h1{
+	font-size:60px;
+	color:#424242	;
+	text-align:center;
+	-webkit-filter:blur(0px);
+	padding-top:0;
+	margin-top:0;
+	font-family:微软雅黑;
+}
+#footer{
+	margin:0 auto;	
+	width:40%;
+}	
+#footer img{
+	float:right;
+}
+</style>
+</head>
+<body scroll=no>
+<div id="topdiv">
+<h1>贪吃蛇</h1>
+</div>
+<div id="cen">
+<canvas id="myCanvas" width=400 height=400>当前浏览器不支持canvas</canvas>
+<script>
+var c = document.getElementById("myCanvas");
+var time = 100;
+var cxt = c.getContext("2d");
+var x = y = 32;
+var a = 0;
+var b = 0;
+var t = 8;
+var xmap = new Array();
+var ymap = new Array();
+var size = 8;
+var direction = 2;
+var con = 0;
+var interval;
+var not = false;
+function rand_frog(){
+	a = Math.floor(Math.random()*50);
+	b = Math.floor(Math.random()*50);
+	var sure = true;
+	while(sure)
+	{
+		var count = 0;
+			for(var i = 0;i<xmap.length;i++)
+		{
+			if((a*8== xmap[i])&& (b*8 == ymap[i]))
+				count ++;
+		}
+		if(count == 0 )
+			sure = false;
+		else 
+		{
+			a = Math.floor(Math.random()*50);
+			b = Math.floor(Math.random()*50);
+		}
+	}
+	cxt.fillStyle = "#00B100";
+	cxt.strokeStyle = "#00B100";
+	cxt.fillRect(a*8,b*8,8,8);
+}
+function gohead()
+{
+	cxt.fillStyle="white";
+	cxt.fillRect(0,0,400,400);
+	cxt.font="30px 微软雅黑";
+	cxt.fillStyle="#424242";
+	cxt.fillText("按空格键开始游戏",70,200);
+}
+document.onkeydown = function(e){
+	var code = e.keyCode -37;
+	switch(code)
+	{
+		case 1:if(direction !=3)direction = 1;break;//上 
+		case 2:if(direction !=0)direction = 2;break;//右
+		case 3:if(direction !=1)direction = 3;break;//下
+		case 0:if(direction !=2)direction = 0;break;//左
+	}
+
+		if(e.keyCode == 32)
+	{		
+			if(not == false){
+			cxt.clearRect(0,0,400,400);
+			rand_frog();
+			interval = self.setInterval("set_game_speed()",time);			
+			not = true;
+			con = 1;
+		}
+		else{
+			if(con == 0)
+			{	
+				interval = self.setInterval("set_game_speed()",time);
+				con = 1;
+			}
+			else
+			{
+				clearInterval(interval);
+				con = 0;
+			}	
+		}
+	}
+}
+function set_game_speed(){
+	switch(direction){
+		case 1:y = y - size; break;
+		case 2:x = x+ size;break;
+		case 0:x= x-size;break;
+		case 3:y = y + size ;break;
+	}
+	if(xmap.length > t)
+	{
+		cxt.clearRect(xmap.shift(),ymap.shift(),size,size);
+	}
+	xmap.push(x);
+	ymap.push(y);
+	cxt.fillStyle = "#00B100";
+	cxt.strokeStyle = "#00B100";
+	cxt.fillRect(x,y,size,size);
+
+	if(x>=400||y>=400||x<=0||y<=0)
+	{
+		if(x>=400)
+			x = 0;
+		if(x<0)
+			x = 392;
+		if(y>=400)
+			y = 0;
+		if(y<0)
+			y = 392;
+	}
+	for (var i =0;i<xmap.length-1;i++)
+	{
+		if(parseInt(xmap[i]) == x && parseInt(ymap[i])==y)
+		{
+			alert("咬到自己了。。。");
+			window.location.reload();
+		}
+	}
+	if((a*8)==x && (b*8) ==y)
+	{
+		t++;
+		rand_frog();
+		clearInterval(interval);
+		if(time >40)
+			time-=5;
+		interval = self.setInterval("set_game_speed()",time);
+		document.getElementById("star").innerHTML = (xmap.length - 8);
+	}	
+}
+window.onload=gohead();
+</script>
+</div>
+<div id="intorduce">
+<p>使用↑ ↓ ← →来控制小蛇的移动，随着食物的增多，速度也会增加，没有边界，但是碰到自己会挂哦！  按空格键开始/暂停游戏！</p>
+<p></p>
+<p><h2>你当前的分数是：<span id="star">0</span></h2></p>
+</div>
+<div id="footer">
+<a href="../index.html"><img src="back.jpg" width="100px" height="100px"></a>	
+</div>
+</body>
+</html>

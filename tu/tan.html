@@ -1,0 +1,348 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<title>打飞机</title>
+<style>
+#con{
+	margin:16px auto;
+	width:40%;
+	background:white;
+	max-width:400;
+	max-height:400;
+	min-height:400;
+	min-width:400;
+}
+#footer{
+	margin:0 auto;	
+	width:40%;
+}	
+#footer img{
+	float:right;
+}
+h1{
+	font-size:60px;
+	color:#424242	;
+	text-align:center;
+	-webkit-filter:blur(0px);
+	padding-top:0;
+	margin-top:0;
+	font-family:微软雅黑;
+}
+</style>
+</head>
+<body>
+<h1>飞机大战</h1>
+<div id="con">
+<canvas id="myCanvas" width="400" height="400">你的浏览器不支持canvas哦！</canvas>
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+var myplane;
+var aiplane = new Array();
+var mybull =[] ;
+var aibull = [];
+var xmap = new Array("200","195","205");
+var ymap = new Array("350","360","360");
+var direction = 1;
+var fly;
+var mybull_inter;
+var mybulll_count=0;
+var canfly = true;
+var code;
+var countAiplane = 0;
+var countAibull = 0 ;
+function set_plane()
+{
+	ctx.beginPath();
+	ctx.fillStyle = "black";
+	ctx.moveTo(xmap[0],ymap[0]);
+	ctx.lineTo(xmap[1],ymap[1]);
+	ctx.lineTo(xmap[2],ymap[2]);
+	ctx.closePath();
+	ctx.fill();
+	
+}
+function clean_plane()
+{
+	ctx.beginPath();
+	ctx.fillStyle = "white";
+	ctx.strokeStyle="white";
+	ctx.lineWidth = 3;
+	ctx.moveTo(xmap[0],ymap[0]);
+	ctx.lineTo(xmap[1],ymap[1]);
+	ctx.lineTo(xmap[2],ymap[2]);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.fill();
+}
+document.onkeydown = function(e){
+	code = e.keyCode -37;
+	if(code==1||code==0||code==2||code==3)
+		canfly = true ;
+	if(e.keyCode ==32)
+	{
+		set_fire_move(0);
+	}
+	}
+document.onkeyup = function(e){ 
+	var code1 = e.keyCode -37;
+	if(code1==1||code1==0||code1==2||code1==3)
+		canfly = false;
+	}
+function moveplane(){
+	if(canfly == true)
+	{
+		switch(code)
+	{
+		case 1:
+			direction = 1;
+			if(parseInt(ymap[0])>=10)
+			{	
+				clean_plane();
+				for(var i = 0;i<3;i++)
+				{
+					ymap[i]=parseInt(ymap[i])-5;
+				}
+				
+				set_plane();
+			}
+			break;//上 
+		case 2:
+			direction = 2;
+			if(parseInt(xmap[0])<=390)
+			{	
+				clean_plane();
+				for(var i = 0;i<3;i++)
+				{
+					xmap[i]=parseInt(xmap[i])+5;
+				}
+				
+				set_plane();
+			}
+			break;//右
+		case 3:
+			direction = 3;
+			if(parseInt(ymap[0])<=380)
+			{	
+				clean_plane();
+				for(var i = 0;i<3;i++)
+				{
+					ymap[i]=parseInt(ymap[i])+5;
+				}
+				
+				set_plane();
+			}
+			break;//下
+		case 0:
+			direction = 0;
+			if(parseInt(xmap[0])>=10)
+			{	
+				clean_plane();
+				for(var i = 0;i<3;i++)
+				{
+					xmap[i]=parseInt(xmap[i])-5;
+				}
+				
+				set_plane();
+			}
+			break;//左
+	}
+	}
+
+	}
+function set_fire_move(id)
+{
+	
+	if(id==0)
+	{
+		var x = parseInt(xmap[0]);
+		var y = parseInt(ymap[0]) - 8 ;
+		mybull.push({'x':x,'y':y});
+		ctx.fillStyle = "#525252";
+		ctx.strokeStyle = "#525252";
+		ctx.fillRect(x,y,1,8);
+		mybulll_count++;
+	}
+}
+function move_bull(id)
+{
+	if(id==0)
+	{
+		for(var i=0; i < mybull.length ; i++)
+		{
+			if( parseInt(mybull[i]['y'])>=-8)
+			{
+				ctx.clearRect(mybull[i]['x'],mybull[i]['y'],1,8);
+				mybull[i]['y'] = parseInt(mybull[i]['y']) - 8;
+				ctx.fillStyle = "#525252";
+				ctx.strokeStyle = "#525252";
+				ctx.fillRect(mybull[i]['x'],mybull[i]['y'],1,8);
+			}
+		}
+	}
+}
+function clean_bull()
+{
+	if(mybull.length>0)
+		if(mybull[0]['y']<=-8)
+		{
+			mybull.shift();
+			mybulll_count--;
+		}
+	
+}
+function set_aiplane()
+{
+	if(countAiplane==10)
+	{	
+		var a = Math.ceil(Math.random()*79);
+		a = a * 5;
+		aiplane.push({'x':a,'y':0});
+		ctx.beginPath();
+		ctx.fillStyle = "red";
+		ctx.moveTo(a,0);
+		ctx.lineTo(a-5,-10);
+		ctx.lineTo(a+5,-10);
+		ctx.closePath();
+		ctx.fill();
+		countAiplane = 0;
+	}
+	else countAiplane++ ;
+	
+}
+function clean_aiplane(i)
+{
+	ctx.beginPath();
+	ctx.fillStyle = "white";
+	ctx.strokeStyle="white";
+	ctx.lineWidth = 3;
+	ctx.moveTo(aiplane[i]['x'],aiplane[i]['y']);
+	ctx.lineTo(parseInt(aiplane[i]['x'])-5,parseInt(aiplane[i]['y'])-10);
+	ctx.lineTo(parseInt(aiplane[i]['x'])+5,parseInt(aiplane[i]['y'])-10);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.fill();
+}
+function get_aiplane(i)
+{
+	ctx.beginPath();
+	ctx.fillStyle = "red";
+	ctx.moveTo(aiplane[i]['x'],aiplane[i]['y']);
+	ctx.lineTo(parseInt(aiplane[i]['x'])-5,parseInt(aiplane[i]['y'])-10);
+	ctx.lineTo(parseInt(aiplane[i]['x'])+5,parseInt(aiplane[i]['y'])-10);
+	ctx.closePath();
+	ctx.fill();
+}
+function move_aiplane()
+{
+	for(var i =0;i<aiplane.length;i++)
+	{
+		clean_aiplane(i);
+		aiplane[i]['y'] = parseInt(aiplane[i]['y']) + 5;
+		get_aiplane(i);
+	}
+}
+function clean_nouse_aiplane()
+{
+	if(aiplane.length>0)
+		if(aiplane[0]['y']>450)
+			aiplane.shift();
+}
+function random_bull()
+{
+	if(countAibull==3)
+	{
+		var a = parseInt(aiplane.length);
+		var b = Math.floor(Math.random()*a);
+		set_aibull(b);
+		countAibull = 0;
+	}
+	else countAibull++;
+}
+function set_aibull(i)
+{
+	var x = parseInt(aiplane[i]['x']);
+	var y = parseInt(aiplane[i]['y']);
+	aibull.push({'x':x,'y':y});
+	ctx.fillStyle = "#525252";
+	ctx.strokeStyle = "#525252";
+	ctx.fillRect(x,y,1,8);
+}
+function clean_aibull()
+{
+	if(aibull.length>0)
+		if(aibull[0]['y']>=400)
+			aibull.shift();
+}
+function move_aibull()
+{
+	for(var i=0; i < aibull.length ; i++)
+	{
+		ctx.clearRect(aibull[i]['x'],aibull[i]['y'],1,8);
+		aibull[i]['y'] = parseInt(aibull[i]['y']) + 8;
+		ctx.fillStyle = "#525252";
+		ctx.strokeStyle = "#525252";
+		ctx.fillRect(aibull[i]['x'],aibull[i]['y'],1,8);
+	}
+}
+function bullBoom()
+{
+	var a = mybull.length;
+	var b = aibull.length;
+	for( var i=0; i<a;i++)
+	{
+		for(var j=0; j<b;j++)
+		{
+			if(mybull[i]['x'] == aibull[j]['x'] && mybull[i]['y'] == (parseInt(aibull[j]['y'])+8))
+			{
+				mybull[i]['y'] = -8;
+				aibull[j]['y'] = 400;
+				break;
+			}
+		}
+	}
+}
+function planeBoom()
+{
+	var a = mybull.length;
+	var b = aiplane.length;
+	for( var i=0; i<a;i++)
+	{
+		for(var j=0; j<b;j++)
+		{
+			if(mybull[i]['x'] == aiplane[j]['x'] && mybull[i]['y'] == aiplane[j]['y'])
+			{
+				clean_aiplane(j);
+				break;
+			}
+		}
+	}
+}
+function gogogo()
+{
+	moveplane();
+	move_bull(0);
+	set_aiplane();
+	move_aiplane();
+	random_bull();
+	move_aibull();
+	bullBoom();
+	planeBoom();
+	clean_nouse_aiplane();
+	clean_bull();
+	clean_aibull();
+}
+set_plane();
+var gohead1;
+function gohead()
+{
+	goahead1=setInterval("gogogo()",20);
+}
+window.onload = gohead();	
+</script>
+</div>
+<div id="footer">
+<a href="../index.html"><img src="back.jpg" width="100px" height="100px"></a>	
+</div
+</body>
+</html>

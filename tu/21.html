@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset = "utf-8">
+<title> 21points game </title>
+<style>
+.divbox{ width:550px; float:left;}
+h1{
+	font-size:60px;
+	color:#424242	;
+	text-align:center;
+	-webkit-filter:blur(0px);
+	padding-top:0;
+	margin-top:0;
+
+}
+body{
+	font-family:微软雅黑;
+}
+table{
+	float:left;
+	border-collapse: collapse ;
+}
+#container{
+	width:50%;
+	margin:16px auto;
+}
+
+#footer img{
+	float:right;
+}
+</style>
+<script>
+var total = 0;
+var num = 0;
+var ctotal = 0;
+var cnum1=0;
+var cnum2=0;
+function gg()
+{
+	num++;
+	var num1 = (Math.floor(Math.random()*10)+2);
+	var num2 = (Math.floor(Math.random()*10)+2);
+	document.getElementById("p" + num).innerHTML=num1;
+	num++;
+	document.getElementById("p" + num).innerHTML=num2;
+	if((num2 == num1 )&&(num2 == 11))
+		num2 = 1;
+	total = num1 + num2 ;
+	document.getElementById("startgame").innerHTML = ("你总共的分数是：");
+	document.getElementById("totalg").innerHTML=total;
+	cnum1 = (Math.floor(Math.random()*10)+2);
+	cnum2 = (Math.floor(Math.random()*10)+2);
+	ctotal = cnum1 + cnum2;
+	document.getElementById("bb").innerHTML=('<button onclick = "again()" >要牌！</button>&nbsp;<button onclick = "suan()" >亮牌！</button>');
+	if(total == 21 )
+	{
+		document.getElementById("bb").innerHTML=('<button onclick = "suan()" >亮牌！</button>');	
+	}
+}
+function again()
+{
+	num++;
+	var num1 = (Math.floor(Math.random()*10)+2);
+	document.getElementById("p" + num).innerHTML=num1;
+	total = total + num1;
+	document.getElementById("totalg").innerHTML=total;	
+	if(total > 21)
+	{
+		alert("你输了!");
+		document.getElementById("bb").innerHTML=('<button onclick = "reset()" >重新开始</button>')	;
+		document.getElementById("cp1").innerHTML=cnum1;
+		document.getElementById("cp2").innerHTML=cnum2;
+	}
+	if(total == 21)
+	{
+		document.getElementById("bb").innerHTML=('<button onclick = "suan()" >亮牌！</button>');
+	}
+}
+function reset()
+{
+	for(var i=1; i<7;i++)
+	document.getElementById("p" + i).innerHTML=("&nbsp;&nbsp;");
+	document.getElementById("startgame").innerHTML=(" ");
+	document.getElementById("totalg").innerHTML=(" ");
+	document.getElementById("bb").innerHTML=('<button onclick = "gg()" >开始</button>');
+	document.getElementById("cp1").innerHTML=("**");
+	document.getElementById("cp2").innerHTML=("**");
+	num = 0;
+}
+function suan()
+{
+	document.getElementById("cp1").innerHTML=cnum1;
+	document.getElementById("cp2").innerHTML=cnum2;
+	if(total>ctotal)
+	{
+		alert("你赢了！");
+		document.getElementById("bb").innerHTML=('<button onclick = "reset()" >重新开始</button>');
+	}
+	if(total<ctotal)
+	{
+		alert("你输咯~");
+		document.getElementById("bb").innerHTML=('<button onclick = "reset()" >重新开始</button>');
+	}
+	if(total == ctotal)
+	{
+		alert("平局！");
+		document.getElementById("bb").innerHTML=('<button onclick = "reset()" >重新开始</button>');
+	}
+}
+</script>
+</head>
+<body>
+<div id="container">
+	<h1 id="logo"><em>21点</em></h1>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<table width="50%" height = "50px" border="1">
+	<tr>
+	<td id = "p1" align="center">&nbsp;&nbsp;</td>
+	<td id = "p2" align="center">&nbsp;&nbsp;</td>
+	<td id = "p3" align="center">&nbsp;&nbsp;</td>
+	<td id = "p4" align="center">&nbsp;&nbsp;</td>
+	<td id = "p5" align="center">&nbsp;&nbsp;</td>
+	<td id = "p6" align="center">&nbsp;&nbsp;</td>
+	</tr>
+	</table>
+	<table width="50%" height = "50px" >
+	<tr>
+	<td colspan="2">电脑的手牌</td>
+	</tr>
+	<tr>
+		<td id="cp1" align="center">**</td>
+		<td id="cp2" align="center">**</td>	
+	</tr>
+	</table>
+	<br/><br><br/>	
+	<div>
+	<span id = "startgame" ></span><span id="totalg"></span><br/>
+	<span id="bb"><button onclick = "gg()" >开始</button></span>
+	</div>
+	<div id="footer">
+<a href="../index.html"><img src="back.jpg" width="100px" height="100px"></a>	
+</div>
+</div>
+</body>
+</html>

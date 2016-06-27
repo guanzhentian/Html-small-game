@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Boring 15</title>
+<style>
+td{width:25%;}
+h1{
+	font-size:60px;
+	color:#424242	;
+	text-align:center;
+	-webkit-filter:blur(0px);
+	padding-top:0;
+	margin-top:0;
+
+}
+body{
+	font-family:微软雅黑;
+}
+#footer{
+	margin:0 auto;	
+	width:40%;
+}	
+#footer img{
+	float:right;
+}
+</style>
+<script type="text/javascript">
+	var cells;
+	var swapped;
+	function setup()
+	{
+		cells = new Array([document.getElementById("cell00"),document.getElementById("cell01"),document.getElementById("cell02"),document.getElementById("cell03")],
+							[document.getElementById("cell10"),document.getElementById("cell11"),document.getElementById("cell12"),document.getElementById("cell13")],
+								[document.getElementById("cell20"),document.getElementById("cell21"),document.getElementById("cell22"),document.getElementById("cell23")],
+								[document.getElementById("cell30"),document.getElementById("cell31"),document.getElementById("cell32"),document.getElementById("cell33")]);
+		placeNumbers();
+	}
+	function placeNumbers()
+	{
+		var numbers = new Array();
+		for(var i = 0;i<16;i++)
+			numbers[i] = i;
+		var randomLoc ;
+		var temp;
+		for( i =0; i<16; i++)
+		{
+			randomLoc = Math.floor(Math.random()*15 + 1);
+			temp = numbers[i] ;
+			numbers[i] = numbers[randomLoc] ;
+			numbers[randomLoc] = temp ;
+		}
+		i=0;
+		for(var rows = 0; rows <4;rows++)
+		{
+			for(var cols = 0; cols<4; cols ++)
+			{
+				if(numbers[i]!=0)
+					cells[rows][cols].innerHTML = numbers[i];
+				else 
+					cells[rows][cols].innerHTML = "";
+				++i;
+			}
+		}
+	}
+	function doClick(row,col)
+		{
+			var ding = row -1;
+			var bottom = row + 1;
+			var left = col -1;
+			var right = col +1;
+			swapped = false ;
+			if(ding != -1 && cells[ding][col].innerHTML == "")
+				swap(cells[row][col],cells[ding][col]);
+			else if(right != 4 && cells[row][right].innerHTML == "")
+				swap(cells[row][col],cells[row][right]);
+			else if(bottom != 4 && cells[bottom][col].innerHTML == "")
+				swap(cells[row][col],cells[bottom][col]);
+			else if(left != -1 && cells[row][left].innerHTML == "")
+				swap(cells[row][col],cells[row][left]);
+			else 
+				alert("Illegal move.");
+			checkWinner();
+		}
+	function swap(firstcell,secondcell)
+		{
+			swapped = true;
+			secondcell.innerHTML = firstcell.innerHTML;
+			firstcell.innerHTML = "";
+		}
+	function checkWinner()
+		{
+			var win = true ;
+			for(var i = 0;i<4;i++)
+			{
+				for(var j =0; j<4;j++)
+				{
+					if(!(cells[i][j].innerHTML == i*4 + j + 1))
+						if(!(i == 3 && j == 3))
+							win = false ;
+				}
+			}
+			if(win)
+			{
+				alert(" you are win!")
+				if(window.prompt("play again?","yes"))
+					placeNumbers();
+			}
+		}
+</script>
+</head>
+
+<body onload="setup()">
+<div id = "container">
+	<h1 align="center" id="logo"><em>Greg's 15</em></h1>
+	<div id ="content">
+		<div align="center">
+		  <table align="center" width="60%" border="1">
+		    <tr ><td height="60" onclick ="doClick(0,0)"> <div align="center"><span id="cell00"/>&nbsp;</div></td>
+		      <td onclick ="doClick(0,1)"><div align="center"><span  id="cell01"/>&nbsp;</div></td>
+		      <td onclick ="doClick(0,2)"><div align="center"><span  id="cell02"/>&nbsp;</div></td>
+		      <td onclick ="doClick(0,3)"><div align="center"><span  id="cell03"/>&nbsp;</div></td>
+	        </tr><tr>
+	          <td onclick ="doClick(1,0)" height="60"><div align="center"><span id="cell10"/>&nbsp;</div></td>
+	          <td onclick ="doClick(1,1)"><div align="center"><span id="cell11"/>&nbsp;</div></td>
+	          <td onclick ="doClick(1,2)"><div align="center"><span id="cell12"/>&nbsp;</div></td>
+	          <td onclick ="doClick(1,3)"><div align="center"><span id="cell13"/>&nbsp;</div></td>
+	          </tr><tr>
+	            <td height="60" onclick ="doClick(2,0)"><div align="center"><span id="cell20"/>&nbsp;</div></td>
+	            <td onclick ="doClick(2,1)"><div align="center"><span id="cell21"/>&nbsp;</div></td>
+	            <td onclick ="doClick(2,2)"><div align="center"><span id="cell22"/>&nbsp;</div></td>
+	            <td onclick ="doClick(2,3)"><div align="center"><span id="cell23"/>&nbsp;</div></td>
+	            </tr><tr>
+	              <td onclick ="doClick(3,0)" height="60"><div align="center"><span id="cell30"/>&nbsp;</div></td>
+	              <td onclick ="doClick(3,1)"><div align="center"><span id="cell31"/>&nbsp;</div></td>
+	              <td onclick ="doClick(3,2)"><div align="center"><span id="cell32"/>&nbsp;</div></td>
+	              <td onclick ="doClick(3,3)"><div align="center"><span id="cell33"/>&nbsp;</div></td>
+	              </tr>
+		    </table>
+	  </div>
+  </div>
+  <br/><br/>
+   <p align="center">游戏规则：将所有数字按顺序排列，从第一排由小到大排列。空格只能向上下左右前进。</p>
+</div>
+<div id="footer">
+<a href="../index.html"><img src="back.jpg" width="100px" height="100px"></a>	
+</div>
+</body>
+</html>
